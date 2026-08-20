@@ -19,12 +19,12 @@ def insert_employee_data():
         Insert data inside the minio bucket. For it to work properly, you must provide a csv file with the exact same column names as below\n\n
         Employee_ID – Unique identifier for each employee\n
         Employee_Name – Randomly generated full name\n
-        Age – Employee's age (22 to 60 years)\n
-        Country – Country of employment (chosen from 10 countries)\n
+        Age – Employee's age\n
+        Country – Country of employment\n
         Department – Assigned department (HR, Finance, Engineering, etc.)\n
         Position – Employee's job role (Manager, Developer, Analyst, etc.)\n
-        Salary – Annual salary (randomly generated between $30,000 and $150,000)\n
-        Joining_Date – Employee's start date (randomly selected from the past 10 years)\n
+        Salary – Annual salary\n
+        Joining_Date – Employee's start date\n
     responses:
         200: 
             description: Success
