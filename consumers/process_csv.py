@@ -2,6 +2,7 @@ import pika, json
 import pandas as pd
 from minio import Minio
 from io import BytesIO
+from kafka import KafkaConsumer
 
 def process_csv(channel, method, properties, body):
     try:
@@ -36,9 +37,16 @@ def process_csv(channel, method, properties, body):
         print(f"Error: {e}")
         channel.basic_nack(delivery_tag = method.delivery_tag, requeue = False)
 
-conn = pika.BlockingConnection(pika.ConnectionParameters("localhost", credentials=pika.PlainCredentials("admin", "admin")))
-channel = conn.channel()
-channel.basic_consume(queue = "new_files_queue", on_message_callback=process_csv)
+comsumer = KafkaConsumer(
+    "file-warning",
+    bootstrap_servers= "localhost:9092",
+    value_deserializer=lambda value: json.loads(value.decode("utf-8")),
+    auto_offset_reset="earliest",
+    enable_auto_commit=True,
+    group_id= "csv_processor_group"
+)
 
 print("Waiting for files...")
-channel.start_consuming()
+for message in comsumer:
+    event = message.value
+    process_csv(event)

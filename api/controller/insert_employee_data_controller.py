@@ -1,7 +1,8 @@
 from minio import Minio
 import os
 from io import BytesIO
-import pika, json
+import json
+from kafka import KafkaProducer
 
 def insert_csv(file):
 
@@ -30,20 +31,19 @@ def insert_csv(file):
     return "SUCCESS"
 
 def register_event(bucket, key_file):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host="localhost", credentials=pika.PlainCredentials("admin", "admin"))
+    producer = KafkaProducer(
+        bootstrap_servers = 'localhost:9092',
+        value_serializer = lambda value: json.dumps(value).encode("utf-8")
     )
-    channel = connection.channel()
 
     warning = {
         "bucket": bucket,
         "key": key_file,
     }
 
-    channel.basic_publish(
-        exchange="file_warning",
-        routing_key = "",
-        body = json.dumps(warning),
-        properties = pika.BasicProperties(delivery_mode= 2)
+    producer.send(
+        "file_warning",
+        value=warning,
     )
-    connection.close()
+    producer.flush()
+    producer.close()
