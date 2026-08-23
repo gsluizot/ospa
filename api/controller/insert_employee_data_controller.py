@@ -26,10 +26,7 @@ def insert_csv(file):
     return "SUCCESS"
 
 def register_event(bucket, key_file):
-    producer = KafkaProducer(
-        bootstrap_servers = 'localhost:9092',
-        value_serializer = lambda value: json.dumps(value).encode("utf-8")
-    )
+    producer = current_app.extensions["kafka_producer"]
 
     warning = {
         "bucket": bucket,
