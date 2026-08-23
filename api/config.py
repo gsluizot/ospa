@@ -2,26 +2,28 @@ from minio import Minio
 import os
 from kafka import KafkaProducer
 import json
+from models.enums.env_variables import EnvVariables
+from models.enums.app_extensions import AppExtensions
 
 def configure_minio(app):
 
-    app.config["MINIO_ENDPOINT"] = os.getenv("MINIO_ENDPOINT")
-    app.config["MINIO_ACCESS_KEY"] = os.getenv("MINIO_ACCESS_KEY")
-    app.config["MINIO_SECRET_KEY"] = os.getenv("MINIO_SECRET_KEY")
+    app.config[EnvVariables.MINIO_ENDPOINT.value] = os.getenv(EnvVariables.MINIO_ENDPOINT.value)
+    app.config[EnvVariables.MINIO_ACCESS_KEY.value] = os.getenv(EnvVariables.MINIO_ACCESS_KEY.value)
+    app.config[EnvVariables.MINIO_SECRET_KEY.value] = os.getenv(EnvVariables.MINIO_SECRET_KEY.value)
     
-    app.extensions["minio"] = Minio(
-        app.config["MINIO_ENDPOINT"],
-        access_key = app.config["MINIO_ACCESS_KEY"],
-        secret_key = app.config["MINIO_SECRET_KEY"],
+    app.extensions[AppExtensions.MINIO.value] = Minio(
+        app.config[EnvVariables.MINIO_ENDPOINT.value],
+        access_key = app.config[EnvVariables.MINIO_ACCESS_KEY.value],
+        secret_key = app.config[EnvVariables.MINIO_SECRET_KEY.value],
         secure = False
     )
 
 def configure_kafka(app):
-    app.config["KAFKA_BOOSTRAP_SERVERS"] = os.getenv(
-        "KAFKA_BOOSTRAP_SERVERS"
+    app.config[EnvVariables.KAFKA_BOOSTRAP_SERVERS.value] = os.getenv(
+        EnvVariables.KAFKA_BOOSTRAP_SERVERS.value
     )
 
-    app.extensions["kafka_producer"] = KafkaProducer(
-        bootstrap_servers= app.config["KAFKA_BOOSTRAP_SERVERS"],
+    app.extensions[AppExtensions.KAFKA.value] = KafkaProducer(
+        bootstrap_servers= app.config[EnvVariables.KAFKA_BOOSTRAP_SERVERS.value],
         value_serializer=lambda value: json.dumps(value).encode("utf-8")
     )

@@ -1,12 +1,11 @@
 from flask import current_app
 import os
 from io import BytesIO
-import json
-from kafka import KafkaProducer
+from models.enums.app_extensions import AppExtensions
 
 def insert_csv(file):
 
-    minio_client = current_app.extensions["minio"]
+    minio_client = current_app.extensions[AppExtensions.MINIO.value]
 
     BUCKET = "ospa"
 
@@ -26,7 +25,7 @@ def insert_csv(file):
     return "SUCCESS"
 
 def register_event(bucket, key_file):
-    producer = current_app.extensions["kafka_producer"]
+    producer = current_app.extensions[AppExtensions.KAFKA.value]
 
     warning = {
         "bucket": bucket,
