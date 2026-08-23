@@ -1,4 +1,4 @@
-from minio import Minio
+from flask import current_app
 import os
 from io import BytesIO
 import json
@@ -6,12 +6,7 @@ from kafka import KafkaProducer
 
 def insert_csv(file):
 
-    minio_client = Minio(
-        "localhost:9000",
-        access_key = "minioadmin",
-        secret_key = "minioadmin",
-        secure = False
-    )
+    minio_client = current_app.extensions["minio"]
 
     BUCKET = "ospa"
 

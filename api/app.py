@@ -1,10 +1,15 @@
 from flask import Flask
 from flasgger import Swagger
+from config import configure_minio
 
 from view.insert_employee_data import insert_employee_data_api
 
 def create_app():
+        
     app = Flask(__name__)
+
+    configure_minio(app)
+
     Swagger(app)
 
     app.register_blueprint(insert_employee_data_api)
