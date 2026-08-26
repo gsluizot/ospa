@@ -8,6 +8,8 @@ def insert_employee_data():
     """
     Insert employees inside the minio bucket.
     ---
+    tags:
+        - Employee
     consumes:
         - multipart/form-data
     parameters:
