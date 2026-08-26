@@ -27,3 +27,17 @@ def configure_kafka(app):
         bootstrap_servers= app.config[EnvVariables.KAFKA_BOOSTRAP_SERVERS.value],
         value_serializer=lambda value: json.dumps(value).encode("utf-8")
     )
+
+def configure_swagger():
+    return {
+        "swagger": "2.0",
+        "info": {
+        "title":"OSPA API",
+        "description": "API responsible for the services regarding the OSPA application. That includes the UI, Minio and Kafka interactions.",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Luiz Otavio",
+            "email": "contato.gsluizot@gmail.com",
+            }
+        }
+    }
