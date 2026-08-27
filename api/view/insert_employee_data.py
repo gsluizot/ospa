@@ -53,7 +53,11 @@ def insert_employee_data():
  
     try:
         result = insert_csv(csv_file)
-        register_event("ospa", "bronze/employee_records.csv")
+        event = {
+            "bucket": "ospa",
+            "key": f"bronze/{csv_file.filename}",
+        }
+        register_event(event)
         return jsonify(result), 200
  
     except Exception as e:

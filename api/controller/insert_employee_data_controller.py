@@ -24,17 +24,12 @@ def insert_csv(file):
 
     return "SUCCESS"
 
-def register_event(bucket, key_file):
+def register_event(event):
     producer = current_app.extensions[AppExtensions.KAFKA.value]
 
-    warning = {
-        "bucket": bucket,
-        "key": key_file,
-    }
-
     producer.send(
-        "file_warning",
-        value=warning,
+        "file_processing",
+        value=event,
     )
     producer.flush()
     producer.close()
