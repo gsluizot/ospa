@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
-from controller.insert_employee_data_controller import insert_csv, register_event
+from api.controller.minio_controller import insert_csv
+from api.controller.kafka_controller import register_event
 
 insert_employee_data_api = Blueprint("insert_employee_data", __name__)
 

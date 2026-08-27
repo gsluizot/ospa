@@ -23,13 +23,3 @@ def insert_csv(file):
     )
 
     return "SUCCESS"
-
-def register_event(event):
-    producer = current_app.extensions[AppExtensions.KAFKA.value]
-
-    producer.send(
-        "file_processing",
-        value=event,
-    )
-    producer.flush()
-    producer.close()
