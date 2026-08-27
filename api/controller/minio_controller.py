@@ -4,6 +4,9 @@ from io import BytesIO
 from models.enums.app_extensions import AppExtensions
 
 def insert_csv(file):
+    """
+    Insert a csv file inside minio's bronze layer. The bucket is "ospa" by standard.
+    """
 
     minio_client = current_app.extensions[AppExtensions.MINIO.value]
 
