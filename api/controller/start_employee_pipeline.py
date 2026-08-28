@@ -2,6 +2,7 @@ from flask import current_app
 from models.enums.app_extensions import AppExtensions
 import pandas as pd
 from io import BytesIO
+from api.controller.kafka_controller import register_event
 
 def start_employee_pipeline(file_path: str):
     try:
@@ -18,7 +19,13 @@ def start_employee_pipeline(file_path: str):
         response.release_conn()
 
         df = pd.read_csv(BytesIO(data))
-
+        null_count_event = {
+            "status": "NULL_COUNT_SUCCESSFULL",
+            "total_rows": len(df),
+            "data": df.isnull().sum().to_dict()
+        }
+        register_event(null_count_event)
+        
         print(df.isnull().sum())
         return "SUCCESS"
     except Exception as e:
